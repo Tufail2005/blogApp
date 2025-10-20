@@ -6,7 +6,7 @@ export const Blogs = () => {
   const { loading, blogs } = useBlogs();
 
   if (loading) {
-    return <div>loading</div>;
+    return <div>loading...</div>;
   }
   return (
     <div>
