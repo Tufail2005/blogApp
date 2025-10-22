@@ -3,6 +3,7 @@ import { useState, type ChangeEvent } from "react";
 import type { SignupInput } from "@tufail2000/blog-common";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { toast } from "react-toastify"; // ✅ import toast
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const navigate = useNavigate();
@@ -18,13 +19,16 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
         postInputs
       );
-      const {token, name} = response.data;
+      const { token, name } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("username", name);
+
+      toast.success(`${type === "signup" ? "Sign-Up" : "Sign-In"} successful!`); // ✅ success toast
       navigate("/blogs");
     } catch (error) {
-     console.error("Login/Signup failed:", error);
+      console.error("Login/Signup failed:", error);
+      toast.error(`${type === "signup" ? "Sign-Up" : "Sign-In"} failed!`); // ✅ error toast
     }
   }
 
@@ -62,7 +66,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
             <LabelledInput
               label="Username"
-              placeholder="john001"
+              placeholder="Your Email"
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
@@ -125,3 +129,4 @@ function LabelledInput({
     </div>
   );
 }
+
