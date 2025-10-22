@@ -18,11 +18,13 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
         postInputs
       );
-      const jwt = response.data;
-      localStorage.setItem("token", jwt);
+      const {token, name} = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", name);
       navigate("/blogs");
     } catch (error) {
-      //alert the user that the request failed
+     console.error("Login/Signup failed:", error);
     }
   }
 
