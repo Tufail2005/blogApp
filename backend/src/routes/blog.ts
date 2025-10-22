@@ -29,7 +29,6 @@ blogRouter.use("/*", async (c, next) => {
     if (!user) {
       return c.json({ msg: "You are not logged in" }, 403);
     }
-
     // Store user ID in context
     c.set("userId", user.id);
     return await next();
@@ -68,6 +67,8 @@ blogRouter.post("/", async (c) => {
     console.error(error);
     c.status(411);
     return c.json({ msg: "Error creating blog" });
+  }finally {
+    await prisma.$disconnect();  // Good practice: Always disconnect Prisma
   }
 });
 
@@ -102,6 +103,8 @@ blogRouter.put("/", async (c) => {
     console.error(error);
     c.status(411);
     return c.json({ msg: "Error in getting blog user" });
+  }finally {
+    await prisma.$disconnect();  // Good practice: Always disconnect Prisma
   }
 });
 
@@ -112,14 +115,26 @@ blogRouter.get("/bulk", async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const body = await c.req.json();
   try {
-    const blogs = await prisma.blog.findMany();
+    const blogs = await prisma.blog.findMany({
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
     return c.json({ blogs });
   } catch (error) {
     console.error(error);
-    c.status(411);
+    c.status(500);
     return c.json({ msg: "Error in getting blog" });
+  }finally {
+    await prisma.$disconnect();  
   }
 });
 
@@ -136,6 +151,17 @@ blogRouter.get("/:id", async (c) => {
       where: {
         id: Number(id),
       },
+      select:{
+        id:true,
+        title:true,
+        content:true,
+        author: {
+          select:{
+            name:true,
+
+          }
+        }
+      }
     });
 
     return c.json({ blog });
@@ -143,5 +169,7 @@ blogRouter.get("/:id", async (c) => {
     console.error(error);
     c.status(411);
     return c.json({ msg: "Error in getting post" });
+  }finally {
+    await prisma.$disconnect();  // Good practice: Always disconnect Prisma
   }
 });
