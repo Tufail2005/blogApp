@@ -2,6 +2,7 @@ import { Appbar } from "../components/Appbar";
 import { BlogCard } from "../components/BlogCard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useBlogs } from "../hooks/index";
+import { formatDateWithSuffix } from "../utils/date";
 
 export const Blogs = () => {
   const { loading, blogs } = useBlogs();
@@ -29,7 +30,7 @@ export const Blogs = () => {
               authorName={blog.author.name || "Anonymous"}
               title={blog.title}
               content={blog.content}
-              publisedDate={"20th Oct 2025"}
+              publisedDate={formatDateWithSuffix(blog.createdAt)}
             />
           ))}
         </div>

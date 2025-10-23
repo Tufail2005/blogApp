@@ -1,6 +1,7 @@
 import { Appbar } from "./Appbar"
 import { type Blog } from "../hooks";
 import { Avatar } from "./BlogCard"
+import { formatDateWithSuffix } from "../utils/date";
 
 
 export const FullBlog = ({blog}: {blog: Blog})=>{
@@ -13,7 +14,7 @@ export const FullBlog = ({blog}: {blog: Blog})=>{
                         {blog.title}
                     </div>
                     <div className="text-slate-500 pt-2">
-                        post on 2nd may 2025
+                        post on {formatDateWithSuffix(blog.createdAt)}
                     </div>
                     <div className="pt5">
                         {blog.content}

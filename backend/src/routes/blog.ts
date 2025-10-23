@@ -54,11 +54,13 @@ blogRouter.post("/", async (c) => {
   }
 
   try {
+   const now = new Date(); // current timestamp 
     const blog = await prisma.blog.create({
       data: {
         title: body.title,
         content: body.content,
         authorId: Number(authorId),
+        createdAt: now, //data of when it created 
       },
     });
 
@@ -121,6 +123,7 @@ blogRouter.get("/bulk", async (c) => {
         content: true,
         title: true,
         id: true,
+        createdAt:true, // added new date if changed
         author: {
           select: {
             name: true,
@@ -155,6 +158,7 @@ blogRouter.get("/:id", async (c) => {
         id:true,
         title:true,
         content:true,
+        createdAt:true, // added new date if changed
         author: {
           select:{
             name:true,
