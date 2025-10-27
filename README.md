@@ -32,5 +32,3 @@ This project focuses on speed, scalability, and type-safety — leveraging moder
 
 ---
 
-## 🏗️ Project Structure
-
